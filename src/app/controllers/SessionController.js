@@ -1,4 +1,6 @@
 import * as Yup from 'yup'
+import jwt from 'jsonwebtoken'
+import authConfig from '../../config/auth'
 import User from '../models/User'
 
 
@@ -25,7 +27,11 @@ class SessionController{
         if(! (await user.checkPassword(password))){
            userEmailPasswordIncorrect()
         }
-        return response.json({id: user.id, email, name: user.name,admin:user.admin})
+        return response.json({id: user.id,
+             email, 
+             name: user.name,
+             admin:user.admin,
+             token:jwt.sign({id: user.id},authConfig.secret, {expiresIn:authConfig.expiresIn} )}) //({informação criptografada},"tem que ser uma string(gerando um hash a partir de uma palavra"),quando nosso token vai expirar('5d'= 5 dias)
         
     }
     
