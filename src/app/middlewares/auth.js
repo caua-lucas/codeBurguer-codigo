@@ -14,8 +14,8 @@ export default(request, response, next)=>{
     if(err){
         throw new Error()
     }
-    console.log(decoded)
     request.userId = decoded.id
+    request.userName = decoded.name
     return next()
 
     })
