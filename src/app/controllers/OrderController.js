@@ -2,6 +2,7 @@
 import * as Yup from 'yup'
 import Product from '../models/Products'
 import Category from '../models/Category'
+import Order from '../../schemas/Order'
 
 class OrderController{
    async store(request,response){
@@ -59,9 +60,15 @@ class OrderController{
                 name: request.userName,
             },
             products: editedProduct,
+            status: 'Pedido realizado',
         }
         
-       return response.status(201).json(editedProduct)
+        const orderResponse = await Order.create(order)
+        console.log(orderResponse)
+
+       return response.status(201).json(orderResponse)
     }
 }
 export default new OrderController()
+
+
