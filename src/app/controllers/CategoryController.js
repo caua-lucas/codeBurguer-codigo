@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import Category from '../models/Category'
+import User from '../models/User'
 
 
 class CategoryController{
@@ -13,6 +14,12 @@ class CategoryController{
         } catch(err){
             return response.status(400).json({error: err.errors})
         }
+
+        const {admin: isAdmin} = await User.findByPk(request.userId)
+        if(!isAdmin){
+            return response.status(401).json()
+        }
+        console.log(isAdmin)
 
         const {name} = request.body
                 const categoryExists = await Category.findOne({
@@ -30,7 +37,7 @@ class CategoryController{
 
 
 
-        return response.json({name, id})
+        return response.json({id,name})
     }
 
     async index(request,response){
